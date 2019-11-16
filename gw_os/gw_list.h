@@ -34,7 +34,7 @@
 #include "gw_type.h"
 struct gw_list_node{
     struct gw_list_node *next;
-    gw_event_typedef event;
+    gw_event_t event;
     DATA_TYPE data;
 };
 
