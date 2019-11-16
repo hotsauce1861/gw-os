@@ -32,7 +32,6 @@
 
 #define GLOBAL_TIMER global_timer	
 
-#define EVENT_MAX	30
 /*
 struct gw_event {
     const char* name;				//事件名称
@@ -69,15 +68,30 @@ void gw_event_init_default(gw_event_t *pev, const char* name, DATA_TYPE id){
     gw_event_set_exec_task(pev, GW_DEFAULT_EV_EXEC_FUNC);
     gw_event_set_exec_args_task(pev, GW_DEFAULT_EV_EXEC_ARGS_FUNC);
     gw_event_set_timer(pev, &GLOBAL_TIMER);
+    gw_event_set_timestamp(pev,GLOBAL_TIMER.timestamp);
+    gw_msg_init(&pev->msg,id);
 }
 
-void gw_event_init(gw_event_t *pev){
-    pev->status = DISABLE;
-    pev->g_timer = &GLOBAL_TIMER;
+void gw_event_init(gw_event_t *pev, const char* name, DATA_TYPE id){
+    pev->name = name;
+    gw_event_set_id(pev, id);
+    gw_event_set_type(pev, TYPE_POLL);
+    gw_event_set_priority(pev, GW_DEFAULT_EV_PRIORITY);
+    gw_event_set_poll_time(pev, GW_DEFAULT_EV_POLLTIME);
+    gw_event_set_init_func(pev, GW_DEFAULT_EV_INIT_FUNC);
+    gw_event_set_exec_task(pev, GW_DEFAULT_EV_EXEC_FUNC);
+    gw_event_set_exec_args_task(pev, GW_DEFAULT_EV_EXEC_ARGS_FUNC);
+    gw_event_set_timer(pev, &GLOBAL_TIMER);
+    gw_event_set_timestamp(pev,GLOBAL_TIMER.timestamp);
+    gw_msg_init(&pev->msg,id);
 }
 
 void gw_event_set_timer(gw_event_t *pev, struct gw_timer* ptimer){
     pev->g_timer = ptimer;
+}
+
+void gw_event_set_timestamp(gw_event_t *pev, uint32_t timestamp){
+    pev->timestamp = timestamp;
 }
 
 void gw_event_set_id(gw_event_t *pev, DATA_TYPE id){
@@ -116,5 +130,43 @@ void gw_event_set_priority(gw_event_t *pev, uint32_t priority){
     pev->priority = priority;
 }
 
+DATA_TYPE gw_event_get_id(gw_event_t *pev){
+    return pev->id;
+}
 
+uint8_t gw_event_get_type(gw_event_t *pev){
+    return pev->type;
+}
+
+gw_msg_t gw_event_get_msg(gw_event_t *pev){
+    return pev->msg;
+}
+
+uint8_t gw_event_get_status(gw_event_t *pev){
+    return pev->status;
+}
+
+uint32_t gw_event_get_poll_time(gw_event_t *pev){
+    return pev->poll_time;
+}
+
+uint32_t gw_event_get_priority(gw_event_t *pev){
+    return pev->priority;
+}
+
+p_init_func gw_event_get_init_func(gw_event_t *pev){
+    return pev->init_task;
+}
+
+p_exec_func gw_event_get_exec_task(gw_event_t *pev){
+    return pev->exec_task;
+}
+
+p_exec_args_func gw_event_get_exec_args_task(gw_event_t *pev){
+    return pev->exec_args_task;
+}
+
+struct gw_timer* gw_event_get_timer(gw_event_t *pev){
+    return pev->g_timer;
+}
 

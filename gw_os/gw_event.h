@@ -60,7 +60,7 @@ struct gw_event {
 
 typedef struct gw_event gw_event_t;
 
-void gw_event_init(gw_event_t *pev);
+void gw_event_init(gw_event_t *pev, const char* name, DATA_TYPE id);
 void gw_event_set_id(gw_event_t *pev, DATA_TYPE id);
 void gw_event_set_type(gw_event_t *pev, uint8_t type);
 void gw_event_set_msg(gw_event_t *pev, const gw_msg_t msg);
@@ -71,5 +71,17 @@ void gw_event_set_exec_args_task(gw_event_t *pev, p_exec_args_func exec_args_tas
 void gw_event_set_poll_time(gw_event_t *pev, uint32_t poll_time);
 void gw_event_set_priority(gw_event_t *pev, uint32_t priority);
 void gw_event_set_timer(gw_event_t *pev, struct gw_timer* ptimer);
+void gw_event_set_timestamp(gw_event_t *pev, uint32_t timestamp);
+
+DATA_TYPE   gw_event_get_id(gw_event_t *pev);
+uint8_t     gw_event_get_type(gw_event_t *pev);
+gw_msg_t    gw_event_get_msg(gw_event_t *pev);
+uint8_t     gw_event_get_status(gw_event_t *pev);
+uint32_t    gw_event_get_poll_time(gw_event_t *pev);
+uint32_t    gw_event_get_priority(gw_event_t *pev);
+p_init_func         gw_event_get_init_func(gw_event_t *pev);
+p_exec_func         gw_event_get_exec_task(gw_event_t *pev);
+p_exec_args_func    gw_event_get_exec_args_task(gw_event_t *pev);
+struct gw_timer*    gw_event_get_timer(gw_event_t *pev);
 
 #endif

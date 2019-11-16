@@ -62,20 +62,20 @@ void gw_task_create(const char *name,DATA_TYPE taskid,uint8_t type,
         task_id = global_timer.timestamp + ptask_list->data;
     }
     gw_list_node *pnode = gw_list_node_init(task_id);
-    pnode->event.id = task_id;
-    pnode->event.name = name;
-    pnode->event.status = status;
-    gw_msg_init(&pnode->event.msg,task_id);
-    pnode->event.type = type;
-    pnode->event.poll_time = poll_time;
-    pnode->event.init_task = init_func;
-    pnode->event.exec_task = exec_task;
-    pnode->event.priority = priority;
-    pnode->event.exec_args_task = exec_args_task;
-    pnode->event.timestamp = global_timer.timestamp;
-    pnode->event.g_timer = &global_timer;
-    gw_list_insert_node_first(ptask_list, pnode);
 
+    gw_event_init(&pnode->event,name, task_id);
+
+    gw_event_set_type(&pnode->event, type);
+    gw_event_set_priority(&pnode->event, priority);
+    gw_event_set_poll_time(&pnode->event, poll_time);
+    gw_event_set_init_func(&pnode->event, init_func);
+    gw_event_set_exec_task(&pnode->event, exec_task);
+    gw_event_set_exec_args_task(&pnode->event, exec_args_task);
+    gw_event_set_timer(&pnode->event, &global_timer);
+    gw_event_set_timestamp(&pnode->event, global_timer.timestamp);
+    gw_msg_init(&pnode->event.msg,task_id);
+
+    gw_list_insert_node_first(ptask_list, pnode);
 }
 
 /**
